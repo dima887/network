@@ -17,9 +17,11 @@ abstract class Model {
     public $attributes = [];
     public $errors = [];
     public $rules = [];
+    public $validate;
     
     public function __construct() {
         $this->pdo = Db::instance();
+        $this->validate = new Validate();
     }
 
     public function query($sql){

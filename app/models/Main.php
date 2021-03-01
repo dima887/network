@@ -3,18 +3,11 @@
 namespace app\models;
 
 use fw\core\base\Model;
-use fw\core\Validate;
 
 class Main extends Model{
 
     public $table = 'citys';
-    public $validate;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->validate = new Validate();
-    }
 
     //общее кол-во записей
     public function rowCount($id = '')

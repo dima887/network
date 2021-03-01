@@ -3,19 +3,11 @@
 namespace app\models;
 
 use fw\core\base\Model;
-use fw\core\Validate;
 
 class User extends Model
 {
     public $table = 'users';
-    public $validate;
     public $id;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->validate = new Validate();
-    }
 
     //проверка данных при регистрации
     public function signup($data)

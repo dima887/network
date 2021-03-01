@@ -24,7 +24,7 @@ class MainController extends AppController
             if (!$_FILES['file']['size'] == '') {
                 $_FILES = $model->checkFile($_FILES);
                 if (!$model->validate->error) {
-                     //имя файла
+                    //имя файла
                     $temp = explode("/", $_FILES['file']['type']);
                     (empty($_FILES['file']['name'])) ? $uploadName = NULL : $uploadName = base_convert(time(), 10,
                             36).'-' .base_convert(rand(0, 2000000000), 10, 36).".". $temp[1];
@@ -52,161 +52,110 @@ class MainController extends AppController
             }
         }
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount();
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id  ORDER BY `datatime` DESC LIMIT $start, $perpage";
-
-        $mainStory = $model->findBySql($sql); //все истории на главной странице
+        $mainStory = $model->findBySql($model->sql($start, $perpage));
         $title = 'PAGE TITLE';
         View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'mainStory', 'pagination', 'total'));
     }
 
-
     public function brestAction()
     {
         $model = new Main();
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = 1");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount(1);
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id WHERE s.idcity = 1  ORDER BY `datatime` DESC LIMIT $start, $perpage";
+        $brest = $model->findBySql($model->sql($start, $perpage, 1));
 
-        $brest = $model->findBySql($sql); //истории из Бреста
         $title = 'PAGE TITLE';
-        View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
+        View::setMeta('Главная страница: Брест', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'brest', 'pagination', 'total'));
-
     }
 
     public function vitebskAction()
     {
         $model = new Main();
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = 2");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount(2);
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id WHERE s.idcity = 2  ORDER BY `datatime` DESC LIMIT $start, $perpage";
+        $vitebsk = $model->findBySql($model->sql($start, $perpage,2));
 
-        $vitebsk = $model->findBySql($sql); //истории из Витебска
         $title = 'PAGE TITLE';
-        View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
+        View::setMeta('Главная страница: Витебск', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'vitebsk', 'pagination', 'total'));
-
     }
 
     public function gomelAction()
     {
         $model = new Main();
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = 3");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount(3);
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id WHERE s.idcity = 3  ORDER BY `datatime` DESC LIMIT $start, $perpage";
+        $gomel = $model->findBySql($model->sql($start, $perpage, 3));
 
-        $gomel = $model->findBySql($sql); //истории из Гомеля
         $title = 'PAGE TITLE';
-        View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
+        View::setMeta('Главная страница: Гомель', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'gomel', 'pagination', 'total'));
-
     }
 
     public function grodnoAction()
     {
         $model = new Main();
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = 4");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount(4);
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id WHERE s.idcity = 4  ORDER BY `datatime` DESC LIMIT $start, $perpage";
+        $grodno = $model->findBySql($model->sql($start, $perpage, 4));
 
-        $grodno = $model->findBySql($sql); //истории из Гродно
         $title = 'PAGE TITLE';
-        View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
+        View::setMeta('Главная страница: Гродно', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'grodno', 'pagination', 'total'));
-
     }
 
     public function minskAction()
     {
         $model = new Main();
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = 5");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount(5);
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id WHERE s.idcity = 5  ORDER BY `datatime` DESC LIMIT $start, $perpage";
+        $minsk = $model->findBySql($model->sql($start, $perpage, 5));
 
-        $minsk = $model->findBySql($sql); //истории из Гродно
         $title = 'PAGE TITLE';
-        View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
+        View::setMeta('Главная страница: Минск', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'minsk', 'pagination', 'total'));
-
     }
 
     public function mogilevAction()
     {
         $model = new Main();
 
-        $story = $model->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = 6");
-        $story->execute();
-        $total = $story->rowCount();
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $total = $model->rowCount(6);
         $perpage = 5;
-
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pagination = new Pagination($page, $perpage, $total);
         $start = $pagination->getStart();
-        $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
-        .id = s.iduser INNER
-        JOIN citys c ON s.idcity = c.id WHERE s.idcity = 6  ORDER BY `datatime` DESC LIMIT $start, $perpage";
+        $mogilev = $model->findBySql($model->sql($start, $perpage, 6));
 
-        $mogilev = $model->findBySql($sql); //истории из Мргилева
         $title = 'PAGE TITLE';
-        View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
+        View::setMeta('Главная страница: Могилев', 'Описание страницы', 'Ключевые слова');
         $this->set(compact('title', 'mogilev', 'pagination', 'total'));
-
     }
-    
 }

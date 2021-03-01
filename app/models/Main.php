@@ -3,11 +3,10 @@
 namespace app\models;
 
 use fw\core\base\Model;
-use fw\core\Pagination;
 use fw\core\Validate;
 
 class Main extends Model{
-    
+
     public $table = 'citys';
     public $validate;
 
@@ -15,6 +14,35 @@ class Main extends Model{
     {
         parent::__construct();
         $this->validate = new Validate();
+    }
+
+    //общее кол-во записей
+    public function rowCount($id = '')
+    {
+        if ($id) {
+            $story = $this->pdo->pdo->prepare("SELECT * FROM storys WHERE idcity = $id");
+        }else {
+            $story = $this->pdo->pdo->prepare("SELECT * FROM storys");
+        }
+        $story->execute();
+        $total = $story->rowCount();
+        return $total;
+    }
+
+    //вывод историй
+    public function sql($start, $perpage, $id = '')
+    {
+        if ($id) {
+            $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
+        .id = s.iduser INNER
+        JOIN citys c ON s.idcity = c.id WHERE s.idcity = $id ORDER BY `datatime` DESC LIMIT $start, $perpage";
+            return $sql;
+        }else {
+            $sql ="SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
+        .id = s.iduser INNER
+        JOIN citys c ON s.idcity = c.id ORDER BY `datatime` DESC LIMIT $start, $perpage";
+            return $sql;
+        }
     }
 
     //отправка истории
@@ -58,10 +86,9 @@ class Main extends Model{
     //проверка файла
     public function checkFile($file)
     {
-        $file = $this->validate->checkTypeFile($file);
-        $file = $this->validate->checkErrorLoadFile($file);
+        $file = $this->validate->checkTypeFile($file);   //проверка на формат файла
+        $file = $this->validate->checkErrorLoadFile($file); //проверка на наличие ошибок при загрузке файла
 
         return $file;
     }
-
 }

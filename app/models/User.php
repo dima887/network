@@ -16,6 +16,7 @@ class User extends Model
         $data = $this->validate->required($data, null, null); //проверка на пустоту всех полей
         $data = $this->validate->minLength($data, 'login', 2);  //логин минимум 2 символа
         $data = $this->validate->minLength($data, 'password', 6); //пароль минимум 6 символов
+        $data = $this->validate->minLength($data, 'name', 2); //имя минимум 2 символа
         $data = $this->validate->maxLength($data, null, 30); //макс. 30 символов для каждого поля
         $data = $this->validate->checkEmail($data);  //проверка на корректность email
         $data = $this->validate->checkUnique($data);  //проверка на совпадения login

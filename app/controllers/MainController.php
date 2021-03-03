@@ -18,7 +18,8 @@ class MainController extends AppController
     public function indexAction()
     {
         $model = new Main;
-        if (!empty($_POST)) {
+        $arr = [];
+        if (!empty($_POST) and $_POST['type'] == 1) {
             $_POST = $model->checkStory($_POST);
             if (!$_FILES['file']['size'] == '') {
                 $_FILES = $model->checkFile($_FILES);
@@ -26,30 +27,41 @@ class MainController extends AppController
                     //имя файла
                     $temp = explode("/", $_FILES['file']['type']);
                     (empty($_FILES['file']['name'])) ? $uploadName = NULL : $uploadName = base_convert(time(), 10,
-                            36).'-' .base_convert(rand(0, 2000000000), 10, 36).".". $temp[1];
+                            36) . '-' . base_convert(rand(0, 2000000000), 10, 36) . "." . $temp[1];
                     //путь к файлу
-                    $uploadPath = '../public/images/'.$uploadName;
+                    $uploadPath = '../public/images/' . $uploadName;
                     move_uploaded_file($_FILES['file']['tmp_name'], $uploadPath);
-                    debug($_FILES);
                     $model->story($_POST['type'], $_POST['story'], $_SESSION['user']['id'], $_POST['city'], $_FILES,
                         $uploadPath);
                     redirect();
-                }else {
+                } else {
                     $model->validate->getError();
                     redirect();
                 }
-            }else {
+            } else {
                 if (!$model->validate->error) {
-                    debug($_POST);
                     $model->story($_POST['type'], $_POST['story'], $_SESSION['user']['id'], $_POST['city']);
                     redirect();
-                }else {
+                } else {
                     $model->validate->getError();
-                    debug($_POST);
                     redirect();
                 }
             }
+        }else if (!empty($_POST) and $_POST['type'] == 2) {
+            $_POST = $model->checkSearsh($_POST);
+            if (!$model->validate->error) {
+                $totalName = $model->rowCountNameStory($_POST['search']);
+                $perpage = 5;
+                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $paginationName = new Pagination($page, $perpage, $totalName);
+                $start = $paginationName->getStart();
+                $arr = $model->findBySql($model->search($_POST['search'], $start, $perpage));
+            } else {
+                $model->validate->getError();
+                redirect();
+            }
         }
+
 
         $total = $model->rowCount();
         $perpage = 5;
@@ -59,7 +71,7 @@ class MainController extends AppController
         $mainStory = $model->findBySql($model->sql($start, $perpage));
         $title = 'PAGE TITLE';
         View::setMeta('Главная страница', 'Описание страницы', 'Ключевые слова');
-        $this->set(compact('title', 'mainStory', 'pagination', 'total'));
+        $this->set(compact('title','mainStory', 'pagination', 'total', 'arr'));
     }
 
     public function brestAction()

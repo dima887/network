@@ -1,14 +1,17 @@
-<div class="card my-4" id="_search">
-    <h5 class="card-header">Поиск историй по людям</h5>
-    <div class="card-body">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Поиск...">
-            <span class="input-group-append">
-                            <button class="btn btn-secondary" type="button">Go!</button>
+<form method="post" name="p" action="/main/index">
+    <div class="card my-4" id="_search">
+        <h5 class="card-header">Поиск историй по имени</h5>
+        <div class="card-body">
+            <div class="input-group">
+                <input type="hidden" name="type" value="2">
+                <input type="search" name="search" class="form-control" placeholder="Поиск...">
+                <span class="input-group-append">
+                            <button class="btn btn-secondary" type="submit">Go!</button>
                             </span>
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 <div class="card my-4">
     <h5 class="card-header" id="_city">Истории в городах</h5>

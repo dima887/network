@@ -7,7 +7,23 @@ use fw\core\base\Model;
 class Main extends Model{
 
     public $table = 'citys';
+    
+    //проверка на пустоту в поле поиска
+    public function checkSearsh($name)
+    {
+        $name = $this->validate->basic_check($name);
+        $name = $this->validate->required($name, 'Введите имя', null);
+        return $name;
+    }
 
+    //поиск историй по имени
+    public function search($name, $start, $perpage)
+    {
+        $sql = "SELECT `name`, `story`, `city`, `datatime`, `path`, `idmedia` FROM users u INNER JOIN storys s ON u
+    .id = s.iduser INNER
+        JOIN citys c ON s.idcity = c.id WHERE u.name LIKE '$name%' ORDER BY `datatime` DESC LIMIT $start, $perpage;";
+        return $sql;
+    }
 
     //общее кол-во записей
     public function rowCount($id = '')
@@ -17,6 +33,15 @@ class Main extends Model{
         }else {
             $story = $this->pdo->pdo->prepare("SELECT * FROM storys");
         }
+        $story->execute();
+        $total = $story->rowCount();
+        return $total;
+    }
+    
+    //кол-во историй пользователя
+    public function rowCountNameStory($name)
+    {
+        $story = $this->pdo->pdo->prepare("SELECT * FROM storys s INNER JOIN users u ON s.iduser = u.id WHERE u.name LIKE '$name%';");
         $story->execute();
         $total = $story->rowCount();
         return $total;

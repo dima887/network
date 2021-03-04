@@ -14,7 +14,6 @@ class UserController extends AppController
         }else {
             $this->layout = 'default_off';
         }
-        new \app\models\Main;
     }
 
     //регистрация
@@ -61,8 +60,47 @@ class UserController extends AppController
     }
 
     //личный кабинет
-    public function profilAction()
+    public function profileAction()
     {
+        $user = new User();
+        //изменить логин
+        if (!empty($_POST) and $_POST['type'] == 1) {
+            $user->newLogin($_POST, $_POST['loginOld'], $_POST['loginNew']);
+            if (!$user->validate->error) {
+                $_SESSION['success'] = 'Логин успешно изменён!';
+                redirect();
+            }else{
+                $user->validate->getError();
+                redirect();
+            }
+        }
 
+        //изменить пароль
+        if (!empty($_POST) and $_POST['type'] == 2) {
+            $user->newPassword($_POST, $_POST['passwordOld'], $_POST['passwordNew']);
+            if (!$user->validate->error) {
+                $_SESSION['success'] = 'Пароль успешно изменён!';
+                redirect();
+            }else{
+                $user->validate->getError();
+                redirect();
+            }
+        }
+
+        //изменить email
+        if (!empty($_POST) and $_POST['type'] == 3) {
+            $user->newEmail($_POST, $_POST['emailOld'], $_POST['emailNew']);
+            if (!$user->validate->error) {
+                $_SESSION['success'] = 'email успешно изменён!';
+                redirect();
+            }else{
+                $user->validate->getError();
+                redirect();
+            }
+        }
+        $myStory = $user->findBySql($user->myStory($_SESSION['user']['id']));
+
+        View::setMeta('Профиль');
+        $this->set(compact('myStory'));
     }
 }

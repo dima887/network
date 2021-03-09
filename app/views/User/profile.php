@@ -22,7 +22,6 @@
                         <input type="text" name="loginNew" class="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp"
                                placeholder="Введите новый логин">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <button type="submit" class="btn btn-dark">Изменить</button>
                 </form>
@@ -50,7 +49,6 @@
                         <input type="password" name="passwordNew" class="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp"
                                placeholder="Введите новый пароль">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <button type="submit" class="btn btn-dark">Изменить</button>
                 </form>
@@ -78,7 +76,6 @@
                         <input type="email" name="emailNew" class="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp"
                                placeholder="Введите новый email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <button type="submit" class="btn btn-dark">Изменить</button>
                 </form>
